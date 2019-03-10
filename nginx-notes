@@ -1,0 +1,129 @@
+nginx安装步骤：
+	1.上nginx官网找到链接复制，wget下载，再解压，进去
+	2.运行./configure，报错，未安装gc++编译器（如果已经安装则不需安装），安装编译器。
+	3.再./configure，报错，未安装PCRE库，则安装 sudo apt-get install libpcre3 libpcre3-dev  
+	4.再./configure，报错，未安装ZLIB库，则安装 sudo spt-get install zlib1g zlib1g-dev
+	5.再./cinfigure，不报错，再make，再make install，安装成功。
+	6.检测是否安装成功。如果/usr/local/下面有nginx目录则安装成功。
+
+
+现在本机电脑已经配置好了两个虚拟主机 192.168.1.9  192.168.1.19
+根目录分别在：
+/usr/local/nginx/html/server1
+/usr/local/nginx/html/server2
+配置虚拟主机的配置目录在/usr/local/nginx/conf/xunizhuji.conf中
+启动时如果想加载虚拟主机，则需要这样启动：
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/xunizhuji.conf
+如果不需要加载虚拟主机，则这样启动：
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+（注意：nginx常常自己占用了80端口，可以使用sudo killall -9 nginx命令来杀死）
+
+
+
+1.nginx虚拟主机的配置：
+	
+
+
+
+
+2.nginx日志文件的配置：
+	nginx日志文件格式的配置
+	nginx日志文件存储路径的配置
+	nginx日志文件的切割
+
+nginx日志文件格式的配置：
+	在默认配置文件nginx.conf中，找到http{}中的log_format，里面就是默认的格式，去掉#就可以使用。
+nginx日志文件存储路径的配置：
+	在默认配置文件nginx.conf中，找到http{}中access_log，这里就是日志文件的存放路径，去掉#就可以使用。
+	如果不想存储日志文件，则在下面加入  access_log off; 关闭即可。
+nginx日志文件的切割：
+	1.手动切割：
+		第一步，备份，找到日志文件的存放路径，将日志文件用mv命令先备份。
+		第二步：新开日志文件。命令kill -USR1 nginx的进程号，查看进程号命令：ps -ef | grep nginx 。
+	2.自动切割：
+		第一步：创建cutlog.sh文件，打开，加入 ：
+			#设置变量表示当天时间，格式为年月日
+			D=$(date +%Y%m%d)
+			mv /usr/local/nginx/logs/access.log ${D}.log
+			#kill -USR1 nginx的主进程号
+			kill -USR1 $(cat /usr/local/nginx/nginx.pid)
+		第二步：
+			打开crontab -e,在里面编辑：
+				#表示每天23点59分执行操作
+				23 59 × × × /bin/bash /usr/local/nginx/logs/cutlog.sh，保存即可。
+
+
+3.nginx的缓存配置：
+	nginx的缓存配置详解
+	nginx的其他配置-压缩功能配置
+	nginx的其他配置-自动列目录配置
+
+nginx的缓存配置：
+	在默认配置文件nginx.conf中，在虚拟主机中配置，即在server里面配置，在location下面另外开一个lication：
+		location ~.*\.(jpg|png|gif|swf)${
+			#30天清除以.jpg .png......结尾的文件
+			expires 30d;
+		}		
+		location ~.*\.(css|js)${
+                        #一个小时清除以.css .js......结尾的文件
+                        expires 1h;
+                }
+nginx的压缩功能配置：
+	在默认配置文件nginx.conf中，找到http{}中：
+	#开启gzip压缩
+	gzip on;
+	#设置小于1k的文件不压缩，设置下限
+	gzip_min_lenth 1k;
+	#申请缓存资源（压缩后的内容是存在内存中的，四个16k的数据流）
+	gzip_buffers 4 16k;
+	#设置gzip识别的http版本未1.1
+	gzip_http_version 1.1;
+	#gzip技术需要双向支持，即浏览器和服务器都要支持gzip压缩技术，判断是否双向支持，不是则不进行压缩
+	gzip_vary on;
+	
+
+nginx的自动列目录配置（即在根目录下，如果没有index.html之类的文件时，会列出其他目录）
+	在默认配置文件nginx.conf中，在location /{}里面，加上一行  autoindex on;   即可。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

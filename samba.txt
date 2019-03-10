@@ -1,0 +1,26 @@
+dos charset = CP936
+unix charset = utf8
+display charset = CP936
+directory mask = 0777
+force directory mode = 0777
+directory security mask = 0777
+force directory security mode = 0777
+create mask = 0777
+force create mode = 0777
+security mask = 0777
+force security mode = 0777
+workgroup = MYGROUP　 ← 找到此行，将工作组名称改为 Windows 网络所定义的工作组名
+↓
+workgroup = WORKGROUP　 ← 变为此状态，这里以Windows XP 默认的“WORKGROUP”为例
+; hosts allow = 192.168.1. 192.168.2. 127.　 ← 找到此行，去掉行首的“;”，并制定访问限制
+↓
+hosts allow = 192.168.0. 127.　 ← 变为此状态，指定内网IP地址及本地，只允许这两种情况的访问
+
+
+
+
+
+
+
+
+\\123.207.247.73

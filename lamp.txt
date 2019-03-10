@@ -1,0 +1,88 @@
+Linux操作系统下LAMP环境的搭建：
+
+1 .Apache的安装：
+	yum install -y httpd
+
+
+yum install cmake gcc-gcc++ ncurses-devel perl-Data-Dumper boost boost-doc boost-devel
+
+cmake \
+-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+-DMYSQL_DATADIR=/mydata/mysql/data \
+-DSYSCONFDIR=/etc \
+-DMYSQL_USER=mysql \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 \
+-DWITH_MEMORY_STORAGE_ENGINE=1 \
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
+-DWITH_FEDERATED_STORAGE_ENGINE=1 \
+-DWITH_READLINE=1 \
+-DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock \
+-DMYSQL_TCP_PORT=3306 \
+-DENABLED_LOCAL_INFILE=1 \
+-DENABLE_DOWNLOADS=1 \
+-DWITH_PARTITION_STORAGE_ENGINE=1 \
+-DEXTRA_CHARSETS=all \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DWITH_DEBUG=0 \
+-DMYSQL_MAINTAINER_MODE=0 \
+-DWITH_SSL:STRING=bundled \
+-DWITH_ZLIB:STRING=bundled \
+-DDOWNLOAD_BOOST=1 \
+-DWITH_BOOST=/usr/local/boost
+
+如果想清理此前的编译所生成的文件，则需要使用如下命令：
+
+make clean
+rm CMakeCache.txt
+
+
+
+
+
+
+
+
+LAMP环境搭建：
+    一、 安装php：
+            1. 进入php官网,点击downloads，点击phpxxxxx.tar.gz版本，找到香港的第一个，右键hk1.php.net，复制链接地址。
+        2.回到终端，命令：wget  地址  下载。（如果没有wget命令，则使用yum install wget  命令下载wget）
+        3.下载得到一个mirror压缩包，使用命令：tar -zxvf mirror 解压压缩包
+        4.安装php-fpm，进入官网，点击documentation，点击进程管理器FPM，点击安装，复制 --enable-fpm  ,回到终端，输入命令：yum install gcc gcc++ libxml2-devel
+安装gcc gcc++。
+             5.cd进入解压后的目录，输入命令：
+./configure --prefix=/usr/local/php7-1.0 --enable-fpm
+(其中/usr/local/php7-1.0为安装路径，php7-1.0为文件名，都可以自己指定)
+
+  6.接着敲击命令：make  编译源代码
+  7.接着敲击命令：make install  安装
+  8.测试：在自己的目录下面写一个简单的php文件，如test.php
+                敲击命令 ：/usr/local/php7-1.0/bin/php test.php
+(/usr/local/php7-1.0/bin/php是指用php命令来执行test.php文件)
+如果文件执行成功，则php安装就完成了
+
+
+
+
+
+二、mysql安装：
+1.进入mysql官网，点击downloads，点击community，点击MYSQL community server，下面选择source Code，下面选择Generic Linux (Architecture Independent), Compressed TAR Archive，点击download，右键No thanks, just start my download.，复制链接
+2.进入终端
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+软链映射到当前目录下命令：ln -s basic/web/ web 即可以将当前文件夹下basic文件夹下面的web目录被web映射，即web -> basic/web/
